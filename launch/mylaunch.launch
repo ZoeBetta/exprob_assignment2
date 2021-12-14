@@ -77,7 +77,7 @@
     <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
   </include>
   
-  <!--<node name="goToPoint" pkg="exprob_assignment2" type ="go_to_point.py" />-->
+ <!-- <node name="goToPoint" pkg="exprob_assignment2" type ="go_to_point.py"/>-->
 
 <!-- launch the pddl part-->
 <!-- arguments -->

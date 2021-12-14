@@ -33,6 +33,8 @@ from rosplan_dispatch_msgs.srv import DispatchService, DispatchServiceResponse, 
 from rosplan_knowledge_msgs.srv import KnowledgeUpdateService, KnowledgeUpdateServiceRequest
 from diagnostic_msgs.msg import KeyValue
 import time
+import actionlib
+import exprob_assignment2.msg
 
 
 def initialization():
@@ -57,7 +59,6 @@ def update_waypoint(name):
     req.knowledge.attribute_name= 'hint_taken'
     req.knowledge.values.append(diagnostic_msgs.msg.KeyValue('waypoint', name))	
     result=update(req)
-    print(result)
     
 def update_complete():
     req=KnowledgeUpdateServiceRequest()
@@ -80,7 +81,14 @@ def main():
     initialization()
     success=False
     goal=False
-    
+    client = actionlib.SimpleActionClient('/go_to_point', exprob_assignment2.msg.GoingAction)
+    client.wait_for_server()
+    goal=exprob_assignment2.msg.GoingGoal()
+    goal.target_pose.pose.position.x=1
+    goal.target_pose.pose.position.y=1
+    goal.target_pose.pose.orientation.z=1
+    client.send_goal(goal)
+    client.wait_for_result()
     while ( success== False or goal == False):
         response_pg=problem_generation()
         print('problem generates')

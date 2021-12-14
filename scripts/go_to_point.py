@@ -40,7 +40,7 @@ from tf import transformations
 import math
 import actionlib
 import actionlib.msg
-import exprob_assignment.msg
+import exprob_assignment2.msg
 from std_msgs.msg import String, Float64
 
 # robot state variables
@@ -67,19 +67,6 @@ Vel=Twist()
 
 #action server
 act_s=None
-
-##
-#	\brief This function is called when new data are available on the topic /vel
-#	\param msg: the data received on the topic /vel
-#	\return : None
-# 	
-#	This function saves the data received by the subscriber on the topic /vel
-#	in a global variable of type Twist, Vel, this variable will be used when
-#	there is the need to set a new velocity.
-def clbk_vel(msg):
-    global Vel
-    Vel.linear.x=msg.linear.x
-    Vel.angular.z=msg.angular.z
 
 ##
 #	\brief This function is called when new data are available on the topic /odom
@@ -154,11 +141,11 @@ def fix_yaw(des_pos):
     
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
-        twist_msg.angular.z = Vel.angular.z
+        twist_msg.angular.z = kp_a*err_yaw
         if twist_msg.angular.z > ub_a:
-            twist_msg.angular.z = Vel.angular.z
+            twist_msg.angular.z = ub_a
         elif twist_msg.angular.z < lb_a:
-            twist_msg.angular.z = Vel.angular.z
+            twist_msg.angular.z = lb_a
     pub_.publish(twist_msg)
     # state change conditions
     if math.fabs(err_yaw) <= yaw_precision_2_:
@@ -187,11 +174,11 @@ def go_straight_ahead(des_pos):
 
     if err_pos > dist_precision_:
         twist_msg = Twist()
-        twist_msg.linear.x = Vel.linear.x
+        twist_msg.linear.x = 0.3
         if twist_msg.linear.x > ub_d:
-            twist_msg.linear.x = Vel.linear.x
+            twist_msg.linear.x = ub_d
 
-        twist_msg.angular.z = Vel.angular.z*err_yaw
+        twist_msg.angular.z = kp_a*err_yaw
         pub_.publish(twist_msg)
     else: # state change conditions
         print ('Position error: [%s]' % err_pos)
@@ -217,11 +204,11 @@ def fix_final_yaw(des_yaw):
     rospy.loginfo(err_yaw)
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
-        twist_msg.angular.z = Vel.angular.z
+        twist_msg.angular.z = kp_a*err_yaw
         if twist_msg.angular.z > ub_a:
-            twist_msg.angular.z = Vel.angular.z
+            twist_msg.angular.z = ub_a
         elif twist_msg.angular.z < lb_a:
-            twist_msg.angular.z = Vel.angular.z
+            twist_msg.angular.z = lb_a
     pub_.publish(twist_msg)
     # state change conditions
     if math.fabs(err_yaw) <= yaw_precision_2_:
@@ -256,6 +243,7 @@ def done():
 #	the action server is not preempted it checks which is the state and it 
 #	calls the corresponding function.     
 def go_to_point(goal):
+    print('request received')
     #Implements the logic to go to the goal
     global state_, desired_position_, act_s, success
     desired_position_.x = goal.target_pose.pose.position.x
@@ -307,9 +295,8 @@ def main():
     pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     #I initialize the subscriber on odometry
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
-    sub_linVel = rospy.Subscriber('/vel', Twist, clbk_vel)
     #I initialize the action server
-    act_s = actionlib.SimpleActionServer('/go_to_point', exprob_assignment2.msg.PlanningAction, go_to_point, auto_start=False)
+    act_s = actionlib.SimpleActionServer('/go_to_point', exprob_assignment2.msg.GoingAction, go_to_point, auto_start=False)
     act_s.start()
     rospy.spin()
 

@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   moveit_commander
   moveit_msgs
+  actionlib
   #rosplan_planning_system
   
 )
@@ -179,6 +180,7 @@ install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 ## in contrast to setup.py, you can choose the destination
  catkin_install_python(PROGRAMS
   scripts/planproblem.py
+  scripts/go_to_point.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
