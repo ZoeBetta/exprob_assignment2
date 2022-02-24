@@ -10,3 +10,5 @@ rosrun exprob_assignment2 go_to_point.py
 in another terminal run:
 
 rosrun exprob_assignment2 planproblem.py
+
+remember to add the file in the include folder!!
