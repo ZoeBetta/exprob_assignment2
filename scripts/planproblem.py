@@ -73,6 +73,7 @@ def know_update():
     update_waypoint('wp2')
     update_waypoint('wp3')
     update_waypoint('wp4')
+    update_complete()
 
 def main():
     global pub_, active_, act_s

@@ -22,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_commander
   moveit_msgs
   actionlib
-  #rosplan_planning_system
+  rosplan_planning_system
   
 )
 ## System dependencies are found with CMake's conventions
@@ -145,7 +145,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
  add_executable(simulation src/simulation.cpp)
-
+add_executable(moveaction src/MoveAction.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -155,12 +155,14 @@ include_directories(
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
+add_dependencies(moveaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
  target_link_libraries(simulation
    ${catkin_LIBRARIES}
  )
-
+ target_link_libraries(moveaction
+   ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############
