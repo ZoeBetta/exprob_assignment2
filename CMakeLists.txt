@@ -146,6 +146,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
  add_executable(simulation src/simulation.cpp)
 add_executable(moveaction src/MoveAction.cpp)
+add_executable(tohomeaction src/ToHomeAction.cpp)
+add_executable(fromhomeaction src/FromHomeAction.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -156,11 +158,19 @@ add_executable(moveaction src/MoveAction.cpp)
 ## same as for the library above
 add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(moveaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(tohomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(fromhomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
  target_link_libraries(simulation
    ${catkin_LIBRARIES}
  )
  target_link_libraries(moveaction
+   ${catkin_LIBRARIES}
+)
+ target_link_libraries(tohomeaction
+   ${catkin_LIBRARIES}
+)
+ target_link_libraries(fromhomeaction
    ${catkin_LIBRARIES}
 )
 #############

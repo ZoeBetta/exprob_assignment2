@@ -137,7 +137,7 @@ def fix_yaw(des_pos):
     global yaw_, pub, yaw_precision_2_, state_,Vel
     des_yaw = math.atan2(desired_position_.y - position_.y, desired_position_.x - position_.x)
     err_yaw = normalize_angle(des_yaw - yaw_)
-    rospy.loginfo(err_yaw)
+    #rospy.loginfo(err_yaw)
     
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
@@ -149,7 +149,7 @@ def fix_yaw(des_pos):
     pub_.publish(twist_msg)
     # state change conditions
     if math.fabs(err_yaw) <= yaw_precision_2_:
-        print ('Yaw error: [%s]' % err_yaw)
+        #print ('Yaw error: [%s]' % err_yaw)
         change_state(1)
 
 ##
@@ -170,7 +170,7 @@ def go_straight_ahead(des_pos):
     err_yaw = des_yaw - yaw_
     err_pos = math.sqrt(pow(desired_position_.y - position_.y, 2) + pow(desired_position_.x - position_.x, 2))
     err_yaw = normalize_angle(des_yaw - yaw_)
-    rospy.loginfo(err_yaw)
+    #rospy.loginfo(err_yaw)
 
     if err_pos > dist_precision_:
         twist_msg = Twist()
@@ -181,12 +181,12 @@ def go_straight_ahead(des_pos):
         twist_msg.angular.z = kp_a*err_yaw
         pub_.publish(twist_msg)
     else: # state change conditions
-        print ('Position error: [%s]' % err_pos)
+        #print ('Position error: [%s]' % err_pos)
         change_state(2)
 
     # state change conditions
     if math.fabs(err_yaw) > yaw_precision_:
-        print ('Yaw error: [%s]' % err_yaw)
+        #print ('Yaw error: [%s]' % err_yaw)
         change_state(0)
 
 ##
@@ -248,7 +248,7 @@ def go_to_point(goal):
     global state_, desired_position_, act_s, success
     desired_position_.x = goal.target_pose.pose.position.x
     desired_position_.y = goal.target_pose.pose.position.y
-    des_yaw = goal.target_pose.pose.position.z
+    des_yaw = goal.target_pose.pose.orientation.w
     change_state(0)
     while True:
         # if the action is preempted

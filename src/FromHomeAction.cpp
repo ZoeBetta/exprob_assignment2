@@ -5,11 +5,12 @@
 #include <motion_plan/PlanningAction.h>
 
 namespace KCL_rosplan {
-MoveInterface::MoveInterface(ros::NodeHandle &nh) {
+FromHomeInterface::FromHomeInterface(ros::NodeHandle &nh) {
 // here the initialization
 }
-bool MoveInterface::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
+bool FromHomeInterface::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
 // here the implementation of the action 
+ROS_INFO("in the action");
 std::cout << "Going from " << msg->parameters[0].value << " to " << msg->parameters[1].value << std::endl;
 actionlib::SimpleActionClient<motion_plan::PlanningAction> ac("/go_to_point", true);
 
@@ -43,9 +44,9 @@ return true;
 }
 }
 int main(int argc, char **argv) {
-ros::init(argc, argv, "moveaction", ros::init_options::AnonymousName);
+ros::init(argc, argv, "fromhomeaction", ros::init_options::AnonymousName);
 ros::NodeHandle nh("~");
-KCL_rosplan::MoveInterface my_aci(nh);
+KCL_rosplan::FromHomeInterface my_aci(nh);
 my_aci.runActionInterface();
 return 0;
 }

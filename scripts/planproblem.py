@@ -73,7 +73,7 @@ def know_update():
     update_waypoint('wp2')
     update_waypoint('wp3')
     update_waypoint('wp4')
-    update_complete()
+    #update_complete()
 
 def main():
     global pub_, active_, act_s
@@ -88,8 +88,8 @@ def main():
     goal.target_pose.pose.position.x=1
     goal.target_pose.pose.position.y=1
     goal.target_pose.pose.orientation.z=1
-    client.send_goal(goal)
-    client.wait_for_result()
+    #client.send_goal(goal)
+    #client.wait_for_result()
     while ( success== False or goal == False):
         response_pg=problem_generation()
         print('problem generates')
