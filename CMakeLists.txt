@@ -148,6 +148,7 @@ include_directories(
 add_executable(moveaction src/MoveAction.cpp)
 add_executable(tohomeaction src/ToHomeAction.cpp)
 add_executable(fromhomeaction src/FromHomeAction.cpp)
+add_executable(hintaction src/Hint.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -160,6 +161,7 @@ add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTE
 add_dependencies(moveaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(tohomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(fromhomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(hintaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
  target_link_libraries(simulation
    ${catkin_LIBRARIES}
@@ -171,6 +173,9 @@ add_dependencies(fromhomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXP
    ${catkin_LIBRARIES}
 )
  target_link_libraries(fromhomeaction
+   ${catkin_LIBRARIES}
+)
+ target_link_libraries(hintaction
    ${catkin_LIBRARIES}
 )
 #############
