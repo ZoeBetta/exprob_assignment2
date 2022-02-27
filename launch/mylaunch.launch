@@ -147,7 +147,6 @@ output="screen">
 <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
-
 <node name="rosplan_interface_take_hint" pkg="exprob_assignment2" type="hintaction" respawn="false" output="screen">
 <param name="knowledge_base" value="rosplan_knowledge_base" />
 <param name="pddl_action_name" value="take_hint" />
@@ -164,6 +163,8 @@ output="screen">
 <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
+
+
 <!-- real actions for move_from_home-->
 <node name="rosplan_interface_move_from_home" pkg="exprob_assignment2" type="fromhomeaction" respawn="false" output="screen">
 <param name="knowledge_base" value="rosplan_knowledge_base" />
@@ -171,6 +172,7 @@ output="screen">
 <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
+
 
 <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
 <arg name="pddl_action_name" value="check_complete" />
