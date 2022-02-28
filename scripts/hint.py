@@ -103,6 +103,12 @@ def hint(req):
     #s=str(msg.data)
     # split the received data in the correspondance of the character '/'
     # it creates a list of strings
+    if str(req.ID)=="":
+	    return True
+    if str(req.key)=="":
+	    return True
+    if str(req.value)=="":
+	    return True
     hint_received.append(str(req.ID))
     hint_received.append(str(req.key))
     hint_received.append(str(req.value))
@@ -317,7 +323,6 @@ def check_if_received_before(data):
         if find==0:
             # I add it to the global list
             locations.append(data[2])
-    print (find)
     return find            
 
 ##

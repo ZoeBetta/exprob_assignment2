@@ -7,10 +7,13 @@
 #include <ros/ros.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <exprob_assignment2/ErlOracle.h>
-//#include <exprob_assignment2/HintElaboration.h>
+#include <exprob_assignment2/HintElaboration.h>
+#include <string.h>
 int received=0;
 int previous=1;
 exprob_assignment2::ErlOracle temp;
+
+
 int movehigh();
 int movelow();
 void hintCallback( const exprob_assignment2::ErlOracle x);
@@ -28,7 +31,6 @@ calculatePos();
 
 ROS_INFO("Action performed: completed!");
 	return true;
-
 }
 }
 int main(int argc, char **argv) {
@@ -36,7 +38,6 @@ ros::init(argc, argv, "hintaction", ros::init_options::AnonymousName);
 ros::NodeHandle nh("~");
 ros::NodeHandle n;
 ros:: Subscriber reached= n.subscribe("/oracle_hint", 1000, hintCallback);
-//ros::ServiceClient client = n.serviceClient<exprob_assignment2::HintElaboration>("/hint");
 KCL_rosplan::HintInterface my_aci(nh);
 my_aci.runActionInterface();
 ros::AsyncSpinner spinner(1);
@@ -47,12 +48,15 @@ return 0;
 
 int calculatePos()
 {
+	ros::NodeHandle n1;
+ros::ServiceClient client = n1.serviceClient<exprob_assignment2::HintElaboration>("/hint");
 	int once=0;
 	int i=0;
 	while(received==0 & once==0)
 		{
 			if (previous==1)
 				{
+					std::cout << "Moving" << std::endl;
 					movelow();
 					previous=0;
 					sleep(1);
@@ -62,6 +66,7 @@ int calculatePos()
 				}
 			else if (previous ==0)
 				{
+					std::cout << "Moving" << std::endl;
 					movehigh();
 					previous=1;
 					sleep(1);
@@ -71,8 +76,13 @@ int calculatePos()
 				}
 		}
 	if (received==1)
-		int i=0;
-	// elabora indizio
+		{
+			exprob_assignment2::HintElaboration msg;
+			msg.request.ID=temp.ID;
+			msg.request.key=temp.key;
+			msg.request.value=temp.value;
+			client.call(msg);
+		}
 	received=0;	
 	return 0;
 }
