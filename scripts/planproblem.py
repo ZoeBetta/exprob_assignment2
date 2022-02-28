@@ -35,7 +35,9 @@ from diagnostic_msgs.msg import KeyValue
 import time
 import actionlib
 import exprob_assignment2.msg
+import random
 
+prev=4
 
 def initialization():
     global problem_generation, planning, parsing, dispatch, update
@@ -69,10 +71,19 @@ def update_complete():
     result=update(req)	
 
 def know_update():
-    update_waypoint('wp1')
-    update_waypoint('wp2')
-    update_waypoint('wp3')
-    update_waypoint('wp4')
+    global prev
+    n=random.randint(1,4)
+    while (n==prev):
+        n=random.randint(1,4)
+    prev=n
+    if n==1:
+	    update_waypoint('wp1')
+    elif n==2: 
+	    update_waypoint('wp2')
+    elif n==3:
+        update_waypoint('wp3')
+    elif n==4:
+        update_waypoint('wp4')
     #update_complete()
 
 def main():

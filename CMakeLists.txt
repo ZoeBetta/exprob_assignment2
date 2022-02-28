@@ -69,6 +69,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
    FILES
    Oracle.srv
+   HintElaboration.srv
 #   Service2.srv
  )
 
@@ -198,6 +199,7 @@ install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
  catkin_install_python(PROGRAMS
   scripts/planproblem.py
   scripts/go_to_point.py
+  scripts/hint.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

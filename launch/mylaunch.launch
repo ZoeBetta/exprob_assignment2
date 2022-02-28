@@ -182,5 +182,7 @@ output="screen">
 <arg name="pddl_action_name" value="check_hypothesis" />
 <arg name="action_probability" value="0.7"/>
 </include>
+<!-- node armor -->
+<node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
 
 </launch>
