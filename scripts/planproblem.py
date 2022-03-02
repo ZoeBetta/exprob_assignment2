@@ -84,7 +84,7 @@ def know_update():
         update_waypoint('wp3')
     elif n==4:
         update_waypoint('wp4')
-    #update_complete()
+    update_complete()
 
 def main():
     global pub_, active_, act_s

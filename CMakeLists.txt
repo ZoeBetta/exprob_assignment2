@@ -70,6 +70,8 @@ add_service_files(
    FILES
    Oracle.srv
    HintElaboration.srv
+   Complete.srv
+   Hypothesis.srv
 #   Service2.srv
  )
 
@@ -150,6 +152,8 @@ add_executable(moveaction src/MoveAction.cpp)
 add_executable(tohomeaction src/ToHomeAction.cpp)
 add_executable(fromhomeaction src/FromHomeAction.cpp)
 add_executable(hintaction src/Hint.cpp)
+add_executable(checkcompleteaction src/CompleteAction.cpp)
+add_executable(checkhypothesisaction src/CorrectAction.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -163,6 +167,8 @@ add_dependencies(moveaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTE
 add_dependencies(tohomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(fromhomeaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(hintaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(checkcompleteaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(checkhypothesisaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
  target_link_libraries(simulation
    ${catkin_LIBRARIES}
@@ -177,6 +183,12 @@ add_dependencies(hintaction ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTE
    ${catkin_LIBRARIES}
 )
  target_link_libraries(hintaction
+   ${catkin_LIBRARIES}
+)
+ target_link_libraries(checkcompleteaction
+   ${catkin_LIBRARIES}
+)
+ target_link_libraries(checkhypothesisaction
    ${catkin_LIBRARIES}
 )
 #############
@@ -200,6 +212,7 @@ install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
   scripts/planproblem.py
   scripts/go_to_point.py
   scripts/hint.py
+  scripts/hypothesis.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

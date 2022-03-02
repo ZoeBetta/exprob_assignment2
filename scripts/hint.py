@@ -47,6 +47,7 @@ from std_msgs.msg import String
 from armor_msgs.msg import * 
 from armor_msgs.srv import * 
 from exprob_assignment2.srv import HintElaboration
+from exprob_assignment2.srv import Complete,CompleteResponse
 
 #global variables
 people=[]
@@ -55,6 +56,8 @@ locations=[]
 hypothesis=[]
 armor_service = None
 pub= None
+complcons=[]
+checkcorr=[]
 
 ##
 #	\brief This function implements the ros node
@@ -67,7 +70,7 @@ pub= None
 #	
 def main():
   global  armor_service, pub
-  rospy.init_node('Init')
+  rospy.init_node('hint')
   # definition of the Client for the Server on the topic armor_interface_srv
   armor_service = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
   # definition of the publisher to the topic /hypothesis
@@ -76,11 +79,94 @@ def main():
   # waits for the service to be correctly running
   rospy.wait_for_service('armor_interface_srv')
   service=rospy.Service('/hint', HintElaboration, hint)
+  service=rospy.Service('/checkcomplete', Complete, checkcomplete)
+  pub = rospy.Publisher('/complete', String, queue_size=10)
   print('inizializzato tutto')
   # load the ontology from the ontology file
   load_ontology()
   rospy.spin() 
 
+
+
+def checkcomplete(req):
+	## check if there is at least one new complete hypothesis ( I don't want to check more than once the same hypothesis
+	    # check if the hypothesis is complete and consistent
+    print('request to check complete')
+    send=check_complete_consistent()
+    if send==1:
+	    return CompleteResponse(True)
+    else : 
+	    return CompleteResponse(False)
+	
+	
+##
+#	\brief It checks if an hypothesis is complete and not inconsistent
+#	\param ID : of string type, it is the hypothesis identifier 
+#	\return : returns 1 if the hypothesis is complete and not inconsistent
+#    returns 0 if it is either incomplete or inconsistent.
+# 	
+#	This function calls the armor server twice, the first time it retrieves all
+#   the complete hypothesis and it checks if the searched hypothesis is in
+#   that list, it then does the same to check if the hypothesis is inconsistent.
+def check_complete_consistent():
+    #check if the ID hypothesis is completed
+    try:
+        completed=[]
+        inconsistent=[]
+        temp=[]
+        # set the request for the armor server check all the completed hypothesis
+        req=ArmorDirectiveReq()
+        req.client_name= 'tutorial'
+        req.reference_name= 'ontoTest'
+        req.command= 'QUERY'
+        req.primary_command_spec= 'IND'
+        req.secondary_command_spec= 'CLASS'
+        req.args= ['COMPLETED']
+        # send the request
+        msg = armor_service(req)
+        # save the response of the server
+        res=msg.armor_response.queried_objects
+        # clean the results by removing usless parts
+        res_final=clean_queries(res)
+        # for all the elements retrieved I check if their ID is equal
+        # to the one that needs to be checked
+        completed=res_final
+        # set the request for the armor server check all the inconsistent hypothesis
+        req=ArmorDirectiveReq()
+        req.client_name= 'tutorial'
+        req.reference_name= 'ontoTest'
+        req.command= 'QUERY'
+        req.primary_command_spec= 'IND'
+        req.secondary_command_spec= 'CLASS'
+        req.args= ['INCONSISTENT']
+        # send the request
+        msg = armor_service(req)
+        # save the response of the server
+        res=msg.armor_response.queried_objects
+        # clean the results by removing usless parts
+        res_final=clean_queries(res)
+        # for all the elements retrieved I check if their ID is equal
+        # to the one that needs to be checked
+        inconsistent=res_final
+        # if the hypothesis is completed AND inconsistent return 1
+        for i in range(len(completed)):
+            dontdo=0
+            for j in range(len(inconsistent)):
+                if completed[i]==inconsistent[j]:
+                    dontdo=1
+            if dontdo==0:
+                temp.append(completed[i])
+        if len(temp)>0:
+            complcons=temp
+            for i in range(len(temp)):
+                pub.publish(temp[i])
+            return 1
+        else :
+            return 0
+    except rospy.ServiceException as e:
+        print(e)
+	
+	
 ##
 #	\brief This function is called when new data are available on the topic /hint
 #	\param msg: he data received on the topic /hint, it is of type std_msgs::String
@@ -103,11 +189,14 @@ def hint(req):
     #s=str(msg.data)
     # split the received data in the correspondance of the character '/'
     # it creates a list of strings
-    if str(req.ID)=="":
+    if str(req.ID)=="" or req.ID==-1:
+	    print('id wrong')
 	    return True
-    if str(req.key)=="":
+    if str(req.key)=="" or str(req.key)=='0' or str(req.key)=='-1' or (str(req.key)!='who' and str(req.key)!='what' and str(req.key)!='where'):
+	    print('key wrong')
 	    return True
-    if str(req.value)=="":
+    if str(req.value)=="" or str(req.value)=='0' or str(req.value)=='-1':
+	    print('value wrong')
 	    return True
     hint_received.append(str(req.ID))
     hint_received.append(str(req.key))
@@ -171,7 +260,6 @@ def add_instance(name, class_type):
     try:
         # from the class type (who, what,where) find the class (PERSON,LOCATION,WEAPON)
         class_id=find_type(class_type)
-        print(class_id)
         # set the request for the armor server to add an instance of a class
         req=ArmorDirectiveReq()
         req.client_name= 'tutorial'

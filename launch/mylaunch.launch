@@ -174,15 +174,24 @@ output="screen">
 </node>
 
 
-<include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
-<arg name="pddl_action_name" value="check_complete" />
-<arg name="action_probability" value="0.7"/>
-</include>
-<include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
-<arg name="pddl_action_name" value="check_hypothesis" />
-<arg name="action_probability" value="0.7"/>
-</include>
+<!-- real actions for check_complete-->
+<node name="rosplan_interface_check_complete" pkg="exprob_assignment2" type="checkcompleteaction" respawn="false" output="screen">
+<param name="knowledge_base" value="rosplan_knowledge_base" />
+<param name="pddl_action_name" value="check_complete" />
+<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+</node>
+
+
+<!-- real actions for check_hypothesis-->
+<node name="rosplan_interface_check_hypothesis" pkg="exprob_assignment2" type="checkhypothesisaction" respawn="false" output="screen">
+<param name="knowledge_base" value="rosplan_knowledge_base" />
+<param name="pddl_action_name" value="check_hypothesis" />
+<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+</node>
 <!-- node armor -->
 <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
-
+<!-- node -->
+   <node name="gotopoint"  pkg="exprob_assignment2" type="go_to_point.py"/>
 </launch>
