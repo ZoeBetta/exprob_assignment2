@@ -46,6 +46,7 @@ import rospy
 from std_msgs.msg import String
 from exprob_assignment2.srv import Oracle
 from exprob_assignment2.srv import Hypothesis
+from exprob_assignment2.srv import Results
 
 #global variables
 checkcorr=[]
@@ -79,8 +80,9 @@ def correcthypothesis(req):
     # call the server and control if ok
     global checkcorr
     print(req.start)
-    idtocheck=0
+    idtocheck=-1
     oraclecall=rospy.ServiceProxy('/oracle_solution', Oracle)
+    resultscall = rospy.ServiceProxy('/results', Results)
     for i in range(len(complete)):
         found=0
         for j in range(len(checkcorr)):
@@ -92,13 +94,25 @@ def correcthypothesis(req):
             checkcorr.append(idtocheck)
             break
     del complete[:]
-    resp=oraclecall()
-    print(resp.ID)
-    print(idtocheck)
-    if str(resp.ID)==idtocheck:
-        return True
-    else:
-        return False
+    if idtocheck!=-1:
+        resp=oraclecall()
+        print(resp.ID)
+        winid=resp.ID
+        print(idtocheck)
+        resp=resultscall(winid)
+        print(resp.who)
+        print(resp.what)
+        print(resp.where)
+        if str(resp.ID)==idtocheck:
+            resp=resultscall(winID)
+            print(resp.who)
+            print(resp.what)
+            print(resp.where)
+            return True
+        else:
+            return False
+    else :
+	    return False
             
     	
 if __name__ == '__main__':

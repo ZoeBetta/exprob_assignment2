@@ -48,7 +48,7 @@ from armor_msgs.msg import *
 from armor_msgs.srv import * 
 from exprob_assignment2.srv import HintElaboration
 from exprob_assignment2.srv import Complete,CompleteResponse
-
+from exprob_assignment2.srv import Results, ResultsResponse
 #global variables
 people=[]
 weapons=[]
@@ -80,6 +80,8 @@ def main():
   rospy.wait_for_service('armor_interface_srv')
   service=rospy.Service('/hint', HintElaboration, hint)
   service=rospy.Service('/checkcomplete', Complete, checkcomplete)
+  service=rospy.Service('/results', Results, results)
+  
   pub = rospy.Publisher('/complete', String, queue_size=10)
   print('inizializzato tutto')
   # load the ontology from the ontology file
@@ -87,7 +89,19 @@ def main():
   rospy.spin() 
 
 
-
+def results(req):
+    resp=ResultsResponse()
+    print(str(req.id))
+    print(look_hypothesis(str(req.id), 'who'))
+    #who=look_hypothesis(str(req.id), 'who')
+    #resp.who=who[0]
+    print(str(look_hypothesis(str(req.id), 'what')[0]))
+    #resp.what=what[0]
+    print(str(look_hypothesis(str(req.id), 'where')[0]))
+    #resp.where=where[0]
+    return resp
+	
+	
 def checkcomplete(req):
 	## check if there is at least one new complete hypothesis ( I don't want to check more than once the same hypothesis
 	    # check if the hypothesis is complete and consistent
@@ -461,6 +475,7 @@ def look_hypothesis(ID,class_type):
         msg = armor_service(req)
         # save the response of the server
         res=msg.armor_response.queried_objects
+        print(res)
         # clean the results by removing usless parts
         res_final=clean_queries(res)
         return res_final

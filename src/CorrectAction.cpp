@@ -5,6 +5,7 @@
 #include <motion_plan/PlanningAction.h>
 #include <exprob_assignment2/Hypothesis.h>
 
+
 namespace KCL_rosplan {
 CorrectInterface::CorrectInterface(ros::NodeHandle &nh) {
 // here the initialization
@@ -14,10 +15,12 @@ bool CorrectInterface::concreteCallback(const rosplan_dispatch_msgs::ActionDispa
 
 	ros::NodeHandle n1;
     ros::ServiceClient client = n1.serviceClient<exprob_assignment2::Hypothesis>("/correcthypothesis");
+    
     exprob_assignment2::Hypothesis data;
     data.request.start=true;
     client.call(data);
     if (data.response.ret==true)
+    
 		{ROS_INFO("Action (%s) performed: completed!", msg->name.c_str());
 return true;}
     else {ROS_INFO("Action (%s) performed: wrong!", msg->name.c_str());

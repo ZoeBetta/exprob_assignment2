@@ -72,6 +72,7 @@ add_service_files(
    HintElaboration.srv
    Complete.srv
    Hypothesis.srv
+   Results.srv
 #   Service2.srv
  )
 

@@ -73,17 +73,21 @@ def update_complete():
 def know_update():
     global prev
     n=random.randint(1,4)
-    while (n==prev):
-        n=random.randint(1,4)
-    prev=n
-    if n==1:
-	    update_waypoint('wp1')
-    elif n==2: 
-	    update_waypoint('wp2')
-    elif n==3:
-        update_waypoint('wp3')
-    elif n==4:
-        update_waypoint('wp4')
+    #while (n==prev):
+    #    n=random.randint(1,4)
+    #prev=n
+    #if n==1:
+	 #   update_waypoint('wp1')
+    #elif n==2: 
+	#    update_waypoint('wp2')
+   # elif n==3:
+    #    update_waypoint('wp3')
+    #elif n==4:
+      #  update_waypoint('wp4')
+    update_waypoint('wp1')
+    update_waypoint('wp2')
+    update_waypoint('wp3')
+    update_waypoint('wp4')
     update_complete()
 
 def main():
