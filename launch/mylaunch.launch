@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+	
+	<arg name="random" default="false"/>
+	<param name="random_hint" value="$(arg random)" />
 
   <!-- By default, we do not start a database (it can be large) -->
   <arg name="db" default="false" />
@@ -81,8 +84,8 @@
 
 <!-- launch the pddl part-->
 <!-- arguments -->
-<arg name="domain_path" default="$(find rosplan_demos)/common/domain_prova.pddl" />
-<arg name="problem_path" default="$(find rosplan_demos)/common/problem_prova.pddl" />
+<arg name="domain_path" default="$(find exprob_assignment2)/domain.pddl" />
+<arg name="problem_path" default="$(find exprob_assignment2)/problem.pddl" />
 <arg name="autom_gen_problem_path" default="$(find rosplan_demos)/common/new_problem.pddl" />
 <arg name="use_problem_topic" default="true" />
 <!-- planner will produce output plan and write to this location -->

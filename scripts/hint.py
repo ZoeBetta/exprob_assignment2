@@ -253,7 +253,7 @@ def load_ontology():
         req.secondary_command_spec= ''
         # IT IS NECESSARY TO CHANGE THE FOLLOWING LINE IF THE FILE IS NOT THERE
         # CHANGE THE FIRST ARGUMENT WITH THE CORRECT PATH
-        req.args= ['/root/ros_ws/src/exprob_assignment1/cluedo_ontology.owl', 'http://www.emarolab.it/cluedo-ontology', 'true', 'PELLET', 'true']
+        req.args= ['/root/ros_ws/src/exprob_assignment2/cluedo_ontology.owl', 'http://www.emarolab.it/cluedo-ontology', 'true', 'PELLET', 'true']
         # send the message on the server
         msg = armor_service(req)
         res=msg.armor_response

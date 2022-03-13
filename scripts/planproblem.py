@@ -51,6 +51,7 @@ def initialization():
     dispatch = rospy.ServiceProxy('/rosplan_plan_dispatcher/dispatch_plan',DispatchService)	
     rospy.wait_for_service('/rosplan_knowledge_base/update')
     update= rospy.ServiceProxy('/rosplan_knowledge_base/update', KnowledgeUpdateService)
+    print(rospy.get_param('random_hint'))
     print('all servers loaded')
 
 def update_waypoint(name):
@@ -73,21 +74,23 @@ def update_complete():
 def know_update():
     global prev
     n=random.randint(1,4)
-    #while (n==prev):
-    #    n=random.randint(1,4)
-    #prev=n
-    #if n==1:
-	 #   update_waypoint('wp1')
-    #elif n==2: 
-	#    update_waypoint('wp2')
-   # elif n==3:
-    #    update_waypoint('wp3')
-    #elif n==4:
-      #  update_waypoint('wp4')
-    update_waypoint('wp1')
-    update_waypoint('wp2')
-    update_waypoint('wp3')
-    update_waypoint('wp4')
+    if (rospy.get_param('random_hint')) == True :
+        while (n==prev):
+            n=random.randint(1,4)
+        prev=n
+        if n==1:
+	        update_waypoint('wp1')
+        elif n==2: 
+	        update_waypoint('wp2')
+        elif n==3:
+            update_waypoint('wp3')
+        elif n==4:
+            update_waypoint('wp4')
+    else:
+        update_waypoint('wp1')
+        update_waypoint('wp2')
+        update_waypoint('wp3')
+        update_waypoint('wp4')
     update_complete()
 
 def main():
