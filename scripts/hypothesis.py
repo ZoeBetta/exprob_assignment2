@@ -98,16 +98,9 @@ def correcthypothesis(req):
         resp=oraclecall()
         print(resp.ID)
         winid=resp.ID
-        print(idtocheck)
-        resp=resultscall(winid)
-        print(resp.who)
-        print(resp.what)
-        print(resp.where)
         if str(resp.ID)==idtocheck:
-            resp=resultscall(winID)
-            print(resp.who)
-            print(resp.what)
-            print(resp.where)
+            respcall=resultscall(winid)
+            print( " %s with the %s in the %s" % (respcall.who , respcall.what ,respcall.where))
             return True
         else:
             return False

@@ -58,6 +58,7 @@ armor_service = None
 pub= None
 complcons=[]
 checkcorr=[]
+whosaved=''
 
 ##
 #	\brief This function implements the ros node
@@ -90,15 +91,14 @@ def main():
 
 
 def results(req):
+    global whosaved
     resp=ResultsResponse()
-    print(str(req.id))
-    print(look_hypothesis(str(req.id), 'who'))
-    #who=look_hypothesis(str(req.id), 'who')
-    #resp.who=who[0]
-    print(str(look_hypothesis(str(req.id), 'what')[0]))
-    #resp.what=what[0]
-    print(str(look_hypothesis(str(req.id), 'where')[0]))
-    #resp.where=where[0]
+    what=str(look_hypothesis(str(req.id), 'what')[0])
+    who=str(look_hypothesis(str(req.id), 'who')[0])
+    resp.who=who
+    where=str(look_hypothesis(str(req.id), 'where')[0])
+    resp.what=what
+    resp.where=where
     return resp
 	
 	
@@ -195,7 +195,7 @@ def check_complete_consistent():
 #   as a message of type Hypothesis.msg, that has 4 fields each of string type:
 #   ID, who, what, where.
 def hint(req):
-    global hypothesis
+    global hypothesis,whosaved
     already_done=0
     print('messaggio ricevuto')
     hint_received=[]
@@ -218,6 +218,8 @@ def hint(req):
     print(hint_received[0])
     print(hint_received[1])
     print(hint_received[2])
+    if hint_received[1]=='who':
+	    whosaved=hint_received[1]
     # set the ROS parameter to the ID of the hint just received
     rospy.set_param('ID', hint_received[0])
     print(rospy.get_param('ID'))
@@ -475,7 +477,7 @@ def look_hypothesis(ID,class_type):
         msg = armor_service(req)
         # save the response of the server
         res=msg.armor_response.queried_objects
-        print(res)
+        #print(res)
         # clean the results by removing usless parts
         res_final=clean_queries(res)
         return res_final

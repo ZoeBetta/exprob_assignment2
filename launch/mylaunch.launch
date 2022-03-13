@@ -194,7 +194,7 @@ output="screen">
 <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
 <!-- node -->
    <node name="gotopoint"  pkg="exprob_assignment2" type="go_to_point.py"/>
-    <!--  <node name="hint"  pkg="exprob_assignment2" type="hint.py"/> -->
-     <!--    <node name="hypothesis"  pkg="exprob_assignment2" type="hypothesis.py"/> -->
+<node name="hint"  pkg="exprob_assignment2" type="hint.py" output="screen"/> 
+  <node name="hypothesis"  pkg="exprob_assignment2" type="hypothesis.py" output="screen"/>
             <node name="planproblem"  pkg="exprob_assignment2" type="planproblem.py"/>
 </launch>
