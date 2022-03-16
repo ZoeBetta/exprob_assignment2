@@ -29,7 +29,7 @@
   <arg name="gazebo_gui" default="true"/>
   <arg name="paused" default="false"/>
   <!-- By default, use the urdf location provided from the package -->
-  <arg name="urdf_path" default="/root/ros_ws/src/Robot.urdf"/>
+  <arg name="urdf_path" default="$(find exprob_assignment2)/Robot.urdf"/>
 
   <!-- launch the gazebo simulator and spawn the robot -->
   <!-- startup simulated world -->
@@ -86,7 +86,7 @@
 <!-- arguments -->
 <arg name="domain_path" default="$(find exprob_assignment2)/domain.pddl" />
 <arg name="problem_path" default="$(find exprob_assignment2)/problem.pddl" />
-<arg name="autom_gen_problem_path" default="$(find rosplan_demos)/common/new_problem.pddl" />
+<arg name="autom_gen_problem_path" default="$(find exprob_assignment2)/common/new_problem.pddl" />
 <arg name="use_problem_topic" default="true" />
 <!-- planner will produce output plan and write to this location -->
 <arg name="data_path" default="$(find rosplan_demos)/common/" />  
@@ -150,6 +150,7 @@ output="screen">
 <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
+<!-- real actions for take_hint-->
 <node name="rosplan_interface_take_hint" pkg="exprob_assignment2" type="hintaction" respawn="false" output="screen">
 <param name="knowledge_base" value="rosplan_knowledge_base" />
 <param name="pddl_action_name" value="take_hint" />
@@ -165,7 +166,6 @@ output="screen">
 <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
-
 
 
 <!-- real actions for move_from_home-->
@@ -193,11 +193,14 @@ output="screen">
 <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
+
+
 <!-- node armor -->
 <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
 <!-- node -->
-   <node name="gotopoint"  pkg="exprob_assignment2" type="go_to_point.py"/>
+<node name="gotopoint"  pkg="exprob_assignment2" type="go_to_point.py"/>
 <node name="hint"  pkg="exprob_assignment2" type="hint.py" output="screen"/> 
-  <node name="hypothesis"  pkg="exprob_assignment2" type="hypothesis.py" output="screen"/>
-            <node name="planproblem"  pkg="exprob_assignment2" type="planproblem.py"/>
+<node name="hypothesis"  pkg="exprob_assignment2" type="hypothesis.py" output="screen"/>
+
+<node name="planproblem"  pkg="exprob_assignment2" type="planproblem.py"/>
 </launch>
