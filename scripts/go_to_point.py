@@ -1,18 +1,17 @@
 #! /usr/bin/env python
 
-## @package rt2_assignment2
+## @package exprob_assignment2
 #
 #  \file go_to_point.py
 #  \brief This file implements the behaviour that allows the robot to reach a goal.
 #
 #  \author Zoe Betta
 #  \version 1.0
-#  \date 12/06/2021
+#  \date 16/03/2022
 #  \details
 #  
 #  Subscribes to: <BR>
 #	 /odom
-#    /vel
 #
 #  Publishes to: <BR>
 #	 /cmd_vel 
@@ -76,7 +75,7 @@ act_s=None
 #	This function saves the data received by the subscriber on the topic /odom
 #	in the global variable position for the information about the current position
 #	of the robot. It then changes the format of the orientation from quaternions angles
-#	to euler angles; it is the extracted the third elemen of the vector and it is saved
+#	to euler angles; it is then extracted the third elemen of the vector and it is saved
 #	on the global variable yaw_
 def clbk_odom(msg):
     #This is called when new data are available on /odom
@@ -84,10 +83,10 @@ def clbk_odom(msg):
     global pose_
     global yaw_
 	
-    # position
+    # save the current position
     position_ = msg.pose.pose.position
 
-    # yaw
+    # save the current orientation and yaw
     quaternion = (
         msg.pose.pose.orientation.x,
         msg.pose.pose.orientation.y,
@@ -139,6 +138,7 @@ def fix_yaw(des_pos):
     err_yaw = normalize_angle(des_yaw - yaw_)
     #rospy.loginfo(err_yaw)
     
+    # depending on the error the value of the angular velocity is calculated
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
         twist_msg.angular.z = kp_a*err_yaw

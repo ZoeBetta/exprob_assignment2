@@ -7,7 +7,7 @@
 #
 #  \author Zoe Betta
 #  \version 1.0
-#  \date 29/10/2021
+#  \date 16/03/2022
 #  \details
 #  
 #  Subscribes to: <BR>
@@ -15,9 +15,12 @@
 #
 #  Publishes to: <BR>
 #	    /hypothesis
+#		/complete
 #
 #  Services: <BR>
-#       None
+#       /hint
+#		/complete
+#		/result
 #
 #  Client Services: <BR>
 #       armor_interface_srv
@@ -57,8 +60,6 @@ hypothesis=[]
 armor_service = None
 pub= None
 complcons=[]
-checkcorr=[]
-whosaved=''
 
 ##
 #	\brief This function implements the ros node
@@ -89,41 +90,63 @@ def main():
   load_ontology()
   rospy.spin() 
 
-
+##
+#	\brief This function implements the /results server
+#	\param : req: it is an integer that contains the ID of an hypothesis
+#	\return : resp: it is composed of three strings, one for each  field of the hypothesis
+# 	
+#   This server retrieves the field of a requested hypothesis,
+#   identified by the ID that is sent as a request. 
+#   The fields are retrieved in the armor server and sent back on the response.
+#	
 def results(req):
-    global whosaved
+	# I initialize the response variable
     resp=ResultsResponse()
+    # save the value retrieved in the field what in a temporary variable
     what=str(look_hypothesis(str(req.id), 'what')[0])
+    # save the value retrieved in the field who in a temporary variable
     who=str(look_hypothesis(str(req.id), 'who')[0])
+    # put the value for who in the response message
     resp.who=who
+    # save the value retrieved in the field where in a temporary variable
     where=str(look_hypothesis(str(req.id), 'where')[0])
+    # put the value for what in the response message
     resp.what=what
+    # put the value for where in the response message
     resp.where=where
     return resp
 	
-	
+##
+#	\brief This function implements the /checkcomplete server
+#	\param : req: a boolean to start checking if there is a complete hypothesis available
+#	\return : resp: a boolean to state if there is a complete hypothesis or not
+# 	
+#   This server looks if in the armor server is present a complete hypothesis
+#   if there is at least one complete hypothesis it returns True; False otherwise.
+#		
 def checkcomplete(req):
-	## check if there is at least one new complete hypothesis ( I don't want to check more than once the same hypothesis
-	    # check if the hypothesis is complete and consistent
+	# check if the hypothesis is complete and consistent
     print('request to check complete')
     send=check_complete_consistent()
+    # I check the value returned from the function check_complete_consistent
+    # if tìit is one I have a complete hypothesis
     if send==1:
 	    return CompleteResponse(True)
+	# else I don't have any complete and consistent hypothesis.
     else : 
 	    return CompleteResponse(False)
 	
 	
 ##
 #	\brief It checks if an hypothesis is complete and not inconsistent
-#	\param ID : of string type, it is the hypothesis identifier 
+#	\param None
 #	\return : returns 1 if the hypothesis is complete and not inconsistent
 #    returns 0 if it is either incomplete or inconsistent.
 # 	
 #	This function calls the armor server twice, the first time it retrieves all
-#   the complete hypothesis and it checks if the searched hypothesis is in
-#   that list, it then does the same to check if the hypothesis is inconsistent.
+#   the complete hypothesis and it checks if there is at least one hypothesis that is
+#   complete and not inconsistent
 def check_complete_consistent():
-    #check if the ID hypothesis is completed
     try:
         completed=[]
         inconsistent=[]
@@ -142,8 +165,6 @@ def check_complete_consistent():
         res=msg.armor_response.queried_objects
         # clean the results by removing usless parts
         res_final=clean_queries(res)
-        # for all the elements retrieved I check if their ID is equal
-        # to the one that needs to be checked
         completed=res_final
         # set the request for the armor server check all the inconsistent hypothesis
         req=ArmorDirectiveReq()
@@ -159,22 +180,29 @@ def check_complete_consistent():
         res=msg.armor_response.queried_objects
         # clean the results by removing usless parts
         res_final=clean_queries(res)
-        # for all the elements retrieved I check if their ID is equal
-        # to the one that needs to be checked
         inconsistent=res_final
         # if the hypothesis is completed AND inconsistent return 1
+        # for every element in the array completed
         for i in range(len(completed)):
             dontdo=0
+            # for every element in the list inconsistent
             for j in range(len(inconsistent)):
+				# if the two elements are the same I have a complete and inconsistent hypothesis
                 if completed[i]==inconsistent[j]:
+					# I have a flag to say I can't send this element of complete
                     dontdo=1
+            # if the element of complete is different from all elements of inconsistent
             if dontdo==0:
+			    # Save that element in a temporary list
                 temp.append(completed[i])
+        # If at leat one element is in the list of complete and consistent
         if len(temp)>0:
             complcons=temp
+            # publish all elements on the topic /complete
             for i in range(len(temp)):
                 pub.publish(temp[i])
             return 1
+        # else the list is empty return 0.
         else :
             return 0
     except rospy.ServiceException as e:
