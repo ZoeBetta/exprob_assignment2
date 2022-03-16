@@ -56,7 +56,6 @@ from exprob_assignment2.srv import Results, ResultsResponse
 people=[]
 weapons=[]
 locations=[]
-hypothesis=[]
 armor_service = None
 pub= None
 complcons=[]
@@ -75,15 +74,16 @@ def main():
   rospy.init_node('hint')
   # definition of the Client for the Server on the topic armor_interface_srv
   armor_service = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-  # definition of the publisher to the topic /hypothesis
-  #pub=rospy.Publisher('/hypothesis', Hypothesis, queue_size=10)
   print('waiting for armor server')
   # waits for the service to be correctly running
   rospy.wait_for_service('armor_interface_srv')
+  # definition for the Server on the topic /hint
   service=rospy.Service('/hint', HintElaboration, hint)
+  # definition of the Server on the topic /checkcomplete
   service=rospy.Service('/checkcomplete', Complete, checkcomplete)
+  # definition of the Server on the topic /results
   service=rospy.Service('/results', Results, results)
-  
+  # definition of the publisher on the topic /complete
   pub = rospy.Publisher('/complete', String, queue_size=10)
   print('inizializzato tutto')
   # load the ontology from the ontology file
@@ -210,44 +210,39 @@ def check_complete_consistent():
 	
 	
 ##
-#	\brief This function is called when new data are available on the topic /hint
-#	\param msg: he data received on the topic /hint, it is of type std_msgs::String
-#	\return : None
+#	\brief This function implements the server /hint
+#	\param req: the data that needs to be elaborated
+#	\return : ret a boolean to signal if the hint has been elaborated correctly
 # 	
-#	This function elaborates all of the hints received and decides weather 
-#   or not to make an hypothesy. It checks if the hint is already been saved
-#   into the ontology and after that if it is complete( at least one value
-#   for each field who what where ) and not inconsistent ( not more than one
-#   value for each field) if the hypothesy is complete and not inconsistent, 
-#   and if it was never published before it is sent on the topic /hypothesis
-#   as a message of type Hypothesis.msg, that has 4 fields each of string type:
-#   ID, who, what, where.
+#	This function elaboratesthe hints received. It checks if the hint received has
+#   been received correctly or there are some missing fields. If the hint is 
+#   correct it then checks if it has already been saved in the ontology and 
+#   in case it is necessary it provides to save it
 def hint(req):
-    global hypothesis,whosaved
     already_done=0
-    print('messaggio ricevuto')
+    print('message received')
     hint_received=[]
-    # casting of the received message to the type string
-    #s=str(msg.data)
-    # split the received data in the correspondance of the character '/'
-    # it creates a list of strings
+    # check if ID is correct: not empty and not -1
     if str(req.ID)=="" or req.ID==-1:
 	    print('id wrong')
 	    return True
+	# check if the key is correct: not empty, not -1 and not a value different from the allowed ones
     if str(req.key)=="" or str(req.key)=='0' or str(req.key)=='-1' or (str(req.key)!='who' and str(req.key)!='what' and str(req.key)!='where'):
 	    print('key wrong')
 	    return True
+	# check if the value is correct: not empty, 0, -1 
     if str(req.value)=="" or str(req.value)=='0' or str(req.value)=='-1':
 	    print('value wrong')
 	    return True
+	# only if the hint is correct I reach this point
+	# I sace the hint on a list casting all the elements to be strings
     hint_received.append(str(req.ID))
     hint_received.append(str(req.key))
     hint_received.append(str(req.value))
-    print(hint_received[0])
-    print(hint_received[1])
-    print(hint_received[2])
-    if hint_received[1]=='who':
-	    whosaved=hint_received[1]
+    # uncomment if you want to print the received message
+    #print(hint_received[0])
+    #print(hint_received[1])
+    #print(hint_received[2])
     # set the ROS parameter to the ID of the hint just received
     rospy.set_param('ID', hint_received[0])
     print(rospy.get_param('ID'))
