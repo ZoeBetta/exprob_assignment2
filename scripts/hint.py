@@ -19,7 +19,7 @@
 #
 #  Services: <BR>
 #       /hint
-#		/complete
+#		/checkcomplete
 #		/result
 #
 #  Client Services: <BR>

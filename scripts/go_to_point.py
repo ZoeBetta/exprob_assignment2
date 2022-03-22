@@ -285,8 +285,7 @@ def go_to_point(goal):
 # 	
 #	This function is called when the program is first requested to run. It
 #	initializes all the publishers, subscribers, services and then waits for
-#	a request for the action server that should come from the user_interface
-#	node.
+#	a request for the action server.
 def main():
     global pub_, active_, act_s
     #I initialize the goal
