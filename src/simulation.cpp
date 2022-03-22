@@ -1,3 +1,36 @@
+/** @ package exprob_assignment2
+* 
+*  \file simulation.cpp
+*  \brief implements the simulation for the assignment
+*
+*  \author 
+*  \version 1.0
+*  \date 22/03/2022
+*  \details
+*   
+*  Subscribes to: <BR>
+*	/gazebo/link_states
+*
+*  Publishes to: <BR>
+*   /visualization_marker
+*	/oracle_hint
+*
+*  Services: <BR>
+*    /oracle_solution
+* 
+*   Client Services: <BR>
+*   None
+*    
+*
+*  Action Services: <BR>
+*    None
+*
+*  Description: <BR>
+*  This file implemetns the simulation for the second assignment of the
+*  Experimental Robotics Laboratory course for the Robotics Engineering Master Degree.
+*  It implements the generation of the hints and the server to check the correct
+*  hypothesis.  
+*/
 #include <ros/ros.h>
 #include <gazebo_msgs/LinkStates.h>
 #include <visualization_msgs/MarkerArray.h>
