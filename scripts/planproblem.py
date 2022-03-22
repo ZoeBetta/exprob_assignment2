@@ -3,7 +3,7 @@
 ## @package exprob_assignment2
 #
 #  \file planproblem.py
-#  \brief this file implements the planning server
+#  \brief this file implements the calls to the planning server
 #
 #  \author Zoe Betta
 #  \version 1.0

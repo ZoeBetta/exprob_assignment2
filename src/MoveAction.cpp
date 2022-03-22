@@ -1,7 +1,7 @@
 /** @ package exprob_assignment2
 * 
 *  \file MoveAction.cpp
-*  \brief 
+*  \brief implements the (goto_waypoint) action
 *
 *  \author Zoe Betta
 *  \version 1.0
@@ -26,7 +26,7 @@
 *
 *  Description: <BR>
 *  This program implements the real action to be completed when the planner
-* dispatches the action (go_to_waypoint). It moves the robot to the desired waypoint.
+* dispatches the action (goto_waypoint). It moves the robot to the desired waypoint.
 */
 #include "exprob_assignment2/InterfaceAction.h"
 #include <unistd.h>

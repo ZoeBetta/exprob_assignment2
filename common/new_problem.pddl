@@ -7,13 +7,9 @@
 (:init
 
 
-    (not (hypothesis_complete))
 
     (robot_at_home wphome)
 
-    (hint_taken wp2)
-    (hint_taken wp4)
-    (hint_taken wp1)
 
 )
 (:goal (and

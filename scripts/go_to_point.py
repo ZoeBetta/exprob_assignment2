@@ -3,7 +3,7 @@
 ## @package exprob_assignment2
 #
 #  \file go_to_point.py
-#  \brief This file implements the behaviour that allows the robot to reach a goal.
+#  \brief This file implements the behaviour that allows the robot to reach a goal position.
 #
 #  \author Zoe Betta
 #  \version 1.0

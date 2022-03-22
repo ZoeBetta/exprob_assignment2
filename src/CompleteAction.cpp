@@ -1,7 +1,7 @@
 /** @ package exprob_assignment2
 * 
 *  \file CompleteAction.cpp
-*  \brief 
+*  \brief implements the (checkcomplete) action
 *
 *  \author Zoe Betta
 *  \version 1.0

@@ -1,7 +1,7 @@
 /** @ package exprob_assignment2
 * 
 *  \file Hint.cpp
-*  \brief 
+*  \brief implements the (take_hint) action
 *
 *  \author Zoe Betta
 *  \version 1.0

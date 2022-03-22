@@ -1,7 +1,7 @@
 /** @ package exprob_assignment2
 * 
 *  \file FromHomeAction.cpp
-*  \brief 
+*  \brief implements the (move_from_home) action
 *
 *  \author Zoe Betta
 *  \version 1.0

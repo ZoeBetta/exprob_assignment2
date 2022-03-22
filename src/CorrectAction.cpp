@@ -1,7 +1,7 @@
 /** @ package exprob_assignment2
 * 
 *  \file CorrectAction.cpp
-*  \brief 
+*  \brief implements the (checkhypothesis) action
 *
 *  \author Zoe Betta
 *  \version 1.0
