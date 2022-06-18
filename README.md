@@ -10,3 +10,5 @@ remember to add the file in the include folder!!
 catkin_make --only-pkg-with-deps exprob_assignment2 
 
 move the Robot.urdf outside the package folder in the path: /root/ros_ws/src/Robot.urdf
+
+run the following command ./gradlew deployApp in the armor folder
