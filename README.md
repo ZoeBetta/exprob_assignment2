@@ -34,8 +34,44 @@ random is a ros parameter needed to customize the behaviour of the robot. if ran
 If random is set to false then everytime there is a replan all the waypoints are set as not visited and the robot will have to go to every waypoint before checking if there is at least one hypothesis that is both complete and consistent.
 
 # How the code runs
+The robot starts in the middle of the room, the home position, from there it starts moving looking for hints in predetermined location in the room. For each location the hint can be at a high position or low position as can be seen from the following picture.  
+![room with marker hints](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/room.JPG)
+When the robot reaches a location it first waits to see if the hint is received without moving the arm, this is the case in which, for example, the arm is low and also the hint is in the low position; if the hint is retrieved the move action is completed and the robot starts the take hint action. In order to see if an hint has been received the node that implements the moving action subscribes to the topic hint. If instead no hint is retrieved i nthe arriving postion the robot moves the arm to the other position: like in the following video.
+
+https://user-images.githubusercontent.com/77151364/175808805-849480b6-a4e9-49be-bca1-88ad02522374.mp4
+
+This is the behavior for retrieving the hints, once all of the locations have been visited ( so the robot has retrieved four hints) it checks if there is at least one complete and consistent hypothesis. If there is not any complete and consistent hypothesis the action fails and the robot starts looking for new hints with two different behaviors depending on the random parameter.  
+If instead there is at least one complete and consistent hypothesis the robot, if not already in the home position, should move there and check if one of the complete and consistent hypothesis is the winning one. If it is not the winning one the action fails and the robot replans and starts looking for new hints. If instead the hypothesis is the correct one the node retrieves the fields of the hypothesis of the winning ID and prints the following message on the screen. After that it stops and the user has to manually stop the software by pressing CTR+C
+
 ![what happens at the end](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/finished.JPG)
-![video of the arm moving](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/move%20arm.mp4)
+
+The hints are formed of three fields: who, what, where.  
+The possible values that the person can have are: 
+* missScarlett
+* colonelMustard
+* mrsWhite
+* mrGreen
+* mrsPeacock
+* profPlum
+
+The possible values that the weapon can have are:
+* candlestick
+* dagger
+* leadPipe
+* revolver
+* rope
+* spanner
+
+The possible values that the location can have are:
+* conservatory
+* lounge
+* kitchen
+* library
+* hall
+* study
+* bathroom
+* diningRoom
+* billiardRoom
 
 # Working Hypothesis
 In order to implement this game I started from some hypothesis on the nature of the game and the actual capabilities of the robot. The main goal while deciding how to develop this application has been to develop a flexible architecture that would allow for easy integration and improvements. For this reason there are a lot of nodes, one for each action. In this way if we want to modify the domain file by removing or adding an action it will be a matter of only changing one file.  
@@ -51,6 +87,6 @@ For what concerns the take_hint action this is more problematic since it can fai
 The architecture could be improved by allowing the hint action to fail and programming a recovery plan for that instance. This could be implemented by having a predicate stating the last location of the robot and having a constraint for taking a hint in a location that is not the same as the one where the last hint was searched.  
 Another behaviour that was observed is the fact that, even if it is not required, the robot decides to first move to the home position before looking if an hypothesis is complete. This is probably due to the search algorithm chosen and the predicates used for the domain. This problem slows down the resolution of the game since the robot moves to the home position even if there is not any complete hypothesis to be made, a possible solution could be having the go_home action that as a preconditio must have the predicate (hypothsis_complete) set as true
 ## Authors
-Zoe Betta
-s5063114@studenti.unige.it
+Zoe Betta  
+s5063114@studenti.unige.it  
 zoe.betta@gmail.com
