@@ -1,5 +1,5 @@
 # Brief Introduction
-This project implements the game of Cluedo played by a robot that has to explore an environment searching for hints. The robot should move in a single room looking for hints that are placed in known locations. When the robot is ready to make an hypothesis it should return to the center of the room and ask the oracle if the hypothesis is correct. The logic behind the behaviour of the robot is based on a planninng problem and not a state machine.
+This project implements the game of Cluedo played by a robot that has to explore an environment searching for hints. The robot should move in a single room looking for hints that are placed in known locations. When the robot is ready to make an hypothesis it should return to the center of the room and ask the oracle if the hypothesis is correct. The logic behind the behaviour of the robot is based on a planning problem and not a state machine.
 # Software Architecture
 ![state diagram for the program](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/Architecture_Exprob_2.jpg)
 This architecture is composed of ten nodes. Of these ten nodes six of them implements the action related to the planning problem. There is one node for each action to be implemented.  
