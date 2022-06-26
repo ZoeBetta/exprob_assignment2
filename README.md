@@ -1,7 +1,7 @@
 # Brief Introduction
 This project implements the game of Cluedo played by a robot that has to explore an environment searching for hints. The robot should move in a single room looking for hints that are placed in known locations. When the robot is ready to make an hypothesis it should return to the center of the room and ask the oracle if the hypothesis is correct. The logic behind the behaviour of the robot is based on a planninng problem and not a state machine.
 # Software Architecture
-![state diagram for the program](https://github.com/ZoeBetta/exprob_assignment2/blob/main/Images/Architecture_Exprob_2.jpg)
+![state diagram for the program](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/Architecture_Exprob_2.jpg)
 This architecture is composed of ten nodes. Of these ten nodes six of them implements the action related to the planning problem. There is one node for each action to be implemented.  
 The node that starts the planning server and generates the problem is the planproblem.py node that controls and implements all the server needed to implement a planning problem. It sends the requests to the ROSPlan server and receives the feedbacks, based on which it then updates the knowledge_base if a replan is needed. In particular if one action fails ( only the check_complete action and the check_hypothesis action can fail) the node deletes from the knowledge base at least one hint_taken predicate and also sets to false the predicate hypothesis_complete in order to look for more hints.  
 The node FromHomeAction.cpp implements the action defined in the domain as move_from_home. This action implements the motion of the robot from the home position to a predefined waypoint. We can see the same behaviour from the nodes ToHomeAction.cpp (for the action go_home) and MoveAction.cpp ( for the action goto_waypoint). These three nodes implements the exact same behavior but they are associated to three different action in the domain since there is the need to recognize the home position with a predicate that needs to be set to true and false when the robot reaches the home position or moves from the home position. All three nodes call the action server go_to_point that is implemented in the node go_to_point.py.  
@@ -34,6 +34,8 @@ random is a ros parameter needed to customize the behaviour of the robot. if ran
 If random is set to false then everytime there is a replan all the waypoints are set as not visited and the robot will have to go to every waypoint before checking if there is at least one hypothesis that is both complete and consistent.
 
 # How the code runs
+![what happens at the end](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/finished.JPG)
+![video of the arm moving](https://github.com/ZoeBetta/exprob_assignment2/blob/main/documentation/images/move%20arm.mp4)
 
 # Working Hypothesis
 In order to implement this game I started from some hypothesis on the nature of the game and the actual capabilities of the robot. The main goal while deciding how to develop this application has been to develop a flexible architecture that would allow for easy integration and improvements. For this reason there are a lot of nodes, one for each action. In this way if we want to modify the domain file by removing or adding an action it will be a matter of only changing one file.  
