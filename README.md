@@ -9,6 +9,7 @@ The node go_to_point.py implements the motion of the robot as an action server; 
 1. the robot aligns itself in the direction of the goal
 2. the robot moves in a straight line towards the goal
 3. the robot rotates to obtain the desired orientation  
+
 The node Hint.cpp implements the action take_hint. When it is dispached the robot waits for an hint to be received.  We know that the hints can be found at the waypoint either in a low position or a high position. If when the robot reaches the waypoint no hint is received then the height of the end effector is the wrong one and the robot must move the arm to reach the other level. When the hint is retrieved it is sent as a request to the server /hint that is implemented in the node hint.py and has the goal of checking if the hint is correctly formulated and saving it in the ontology.  
 The node CompleteAction.cpp implements the action check_complete. This node calls the server /checkcomplete that is implemented in the node hint.py. It sends a request and receives a boolean that is true if there is at least one hypothesis that is complete and not consistent and false if no hypothesis is both complete and consistent.  
 The node CorrectAction.cpp implements the check_hypothesis action. The node sends a request to the server /correcthypothesis that is implemented in the node hypothesis.py. The server returns true if the inquired hypothesis is the correct one and false otherwise.  
